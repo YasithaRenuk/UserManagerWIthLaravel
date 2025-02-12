@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -31,5 +32,11 @@ Route::get('/admin', function () {
 Route::get('/edit-post', function () {
     return 'Edit Post Page';
 })->middleware('permission:edit-post');
+
+// Admin route to manage user roles
+Route::middleware(['role:admin'])->group(function () {
+    Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users.index');
+    Route::put('/admin/users/{user}/update-role', [UserController::class, 'updateRole'])->name('admin.users.update-role');
+});
 
 require __DIR__.'/auth.php';
