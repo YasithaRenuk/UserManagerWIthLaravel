@@ -24,4 +24,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::get('/admin', function () {
+    return 'Welcome, Admin!';
+})->middleware('role:admin');
+
+Route::get('/edit-post', function () {
+    return 'Edit Post Page';
+})->middleware('permission:edit-post');
+
 require __DIR__.'/auth.php';
