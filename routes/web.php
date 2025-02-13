@@ -27,14 +27,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/admin', function () {
-    return 'Welcome, Admin!';
-})->middleware('role:admin');
-
-Route::get('/edit-post', function () {
-    return 'Edit Post Page';
-})->middleware('permission:edit-post');
-
 // Admin route to manage user roles
 Route::middleware(['role:admin'])->group(function () {
     Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users.index');
