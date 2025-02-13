@@ -8,6 +8,9 @@ import { useState } from 'react';
 export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
 
+    // Check if the user is an admin
+    const isAdmin = user.roles?.some(role => role.name === 'admin');
+
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
@@ -30,6 +33,24 @@ export default function AuthenticatedLayout({ header, children }) {
                                 >
                                     Dashboard
                                 </NavLink>
+
+                                {/* Show these links only if the user is an admin */}
+                                {isAdmin && (
+                                    <>
+                                        <NavLink
+                                            href={route('admin.users.index')}
+                                            active={route().current('admin.users.index')}
+                                        >
+                                            Manage Users
+                                        </NavLink>
+                                        <NavLink
+                                            href={route('admin.roles.index')}
+                                            active={route().current('admin.roles.index')}
+                                        >
+                                            Manage Roles
+                                        </NavLink>
+                                    </>
+                                )}
                             </div>
                         </div>
 
@@ -134,6 +155,24 @@ export default function AuthenticatedLayout({ header, children }) {
                         >
                             Dashboard
                         </ResponsiveNavLink>
+
+                        {/* Show these links only if the user is an admin */}
+                        {isAdmin && (
+                            <>
+                                <ResponsiveNavLink
+                                    href={route('admin.users.index')}
+                                    active={route().current('admin.users.index')}
+                                >
+                                    Manage Users
+                                </ResponsiveNavLink>
+                                <ResponsiveNavLink
+                                    href={route('admin.roles.index')}
+                                    active={route().current('admin.roles.index')}
+                                >
+                                    Manage Roles
+                                </ResponsiveNavLink>
+                            </>
+                        )}
                     </div>
 
                     <div className="border-t border-gray-200 pb-1 pt-4 dark:border-gray-600">
