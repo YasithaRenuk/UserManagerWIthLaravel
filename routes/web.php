@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
@@ -53,6 +54,26 @@ Route::middleware(['role:admin'])->group(function () {
     Route::put('/admin/roles/{role}', [RoleController::class, 'update'])->name('admin.roles.update');
     // Delete a role
     Route::delete('/admin/roles/{role}', [RoleController::class, 'destroy'])->name('admin.roles.destroy');
+});
+
+Route::middleware(['auth'])->group(function () {
+    // Display posts on the dashboard
+    Route::get('/dashboard', [PostController::class, 'index'])->name('dashboard');
+
+    // Post management routes (only for users with the appropriate permissions)
+    Route::middleware(['permission:create-post'])->group(function () {
+        Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
+        Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+    });
+
+    Route::middleware(['permission:edit-post'])->group(function () {
+        Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
+        Route::put('/posts/{post}', [PostController::class, 'update'])->name('posts.update');
+    });
+
+    Route::middleware(['permission:delete-post'])->group(function () {
+        Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
+    });
 });
 
 require __DIR__.'/auth.php';
