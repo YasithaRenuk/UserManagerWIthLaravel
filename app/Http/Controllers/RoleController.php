@@ -73,15 +73,19 @@ class RoleController extends Controller
 
     // Delete a role
     public function destroy(Role $role)
-    {
-        // Reassign users to a default role (e.g., "user")
-        $defaultRole = Role::where('name', 'user')->first();
-        if ($defaultRole) {
-            $role->users()->update(['role_id' => $defaultRole->id]);
+{
+    // Reassign users to a default role (e.g., "users")
+    $defaultRole = Role::where('name', 'users')->first();
+    
+    if ($defaultRole) {
+        foreach ($role->users as $user) {
+            $user->update(['role_id' => $defaultRole->id]);
         }
-
-        $role->delete();
-
-        return redirect()->route('admin.roles.index')->with('success', 'Role deleted successfully.');
     }
+
+    $role->delete();
+
+    return redirect()->route('admin.roles.index')->with('success', 'Role deleted successfully.');
+}
+
 }
