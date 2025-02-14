@@ -17,3 +17,7 @@
 >npm run dev
 
 >npm run build
+
+##login
+email - admin@admin.com
+password - 123456789
